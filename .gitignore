@@ -1,0 +1,22 @@
+# Unity generated
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Visual Studio / Rider
+*.csproj
+*.sln
+.vs/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Unity asset meta files for ignored folders
+[Ll]ibrary.meta
+[Tt]emp.meta

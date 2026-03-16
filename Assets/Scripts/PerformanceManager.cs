@@ -32,6 +32,7 @@ public class PerformanceManager : MonoBehaviour
     private Image _minBtnImage;
     private Text       _interactionsText;
     private Text       _avgDurText;
+    private Text       _stateText;
     private InputField _timeScaleInput;
     private InputField _smartInput;
     private InputField _dumbInput;
@@ -124,6 +125,13 @@ public class PerformanceManager : MonoBehaviour
             ? Wanderer.TotalDurationSeconds / Wanderer.CompletedInteractions
             : 0f;
         _avgDurText.text = $"Avg Duration: {avg:F1}s";
+
+        // Live state counters — colour-coded to match agent colours
+        _stateText.text =
+            $"<color=#3399ff>Searching: {Wanderer.CountSearching}</color>\n" +
+            $"<color=#ffee00>Asking:    {Wanderer.CountAsking}</color>\n" +
+            $"<color=#00dd66>Moving:    {Wanderer.CountMoving}</color>\n" +
+            $"<color=#ff5500>Talking:   {Wanderer.CountTalking}</color>";
     }
 
     // ── Visuals toggle ────────────────────────────────────────────────────
@@ -254,7 +262,15 @@ public class PerformanceManager : MonoBehaviour
             new Vector2(0,1), new Vector2(0,1), new Vector2(0,1),
             new Vector2(x, y), new Vector2(240, 34),
             font, 20, FontStyle.Bold, TextAnchor.MiddleLeft, Color.white, "Avg Duration: 0.0s");
-        y -= 34 + gap * 2;
+        y -= 34 + gap;
+
+        // ── Live state counters ────────────────────────────────────────────
+        _stateText = MakeText(root, "StateCounters",
+            new Vector2(0,1), new Vector2(0,1), new Vector2(0,1),
+            new Vector2(x, y), new Vector2(240, 84),
+            font, 17, FontStyle.Bold, TextAnchor.MiddleLeft, Color.white, "");
+        _stateText.supportRichText = true;
+        y -= 84 + gap;
 
         // ── Time Scale label + input ───────────────────────────────────────
         MakeText(root, "TSLabel",
@@ -342,10 +358,14 @@ public class PerformanceManager : MonoBehaviour
         _smartInput.text = smart.ToString();
         _dumbInput.text  = dumb.ToString();
 
-        // Reset simulation stats + stopwatch
+        // Reset simulation stats + stopwatch + state counters
         Wanderer.TotalInteractions     = 0;
         Wanderer.CompletedInteractions = 0;
         Wanderer.TotalDurationSeconds  = 0f;
+        Wanderer.CountSearching        = 0;
+        Wanderer.CountAsking           = 0;
+        Wanderer.CountMoving           = 0;
+        Wanderer.CountTalking          = 0;
         _elapsed = 0f;
 
         var spawner = FindObjectOfType<AgentSpawner>();
